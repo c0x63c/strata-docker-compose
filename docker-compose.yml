@@ -1,0 +1,31 @@
+services:
+  strata:
+    build:
+      #args: CUDA_ARCHITECTURES=89 #RTX 40 only
+      context: ./Strata
+      dockerfile: ./Dockerfile
+    container_name: strata01
+    ulimits:
+      memlock: -1
+    environment:
+      PORT: 11435
+      #MODEL: 'Q2_0'
+      MODEL: 'IQ2_XS'
+      #MODEL: 'IQ3_XXS'
+      #MODEL: 'IQ3_S'
+      #MODEL: 'Coder'
+    ports:
+      - '11435:11435/tcp'
+    volumes:
+      - ./volumes/strata/data:/data
+    logging:
+      options:
+        max-size: '200k'
+        max-file: '10'
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]
