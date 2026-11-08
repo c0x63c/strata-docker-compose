@@ -1,9 +1,11 @@
 services:
   strata:
     build:
-      #args: CUDA_ARCHITECTURES=89 #RTX 40 only
       context: ./Strata
       dockerfile: ./Dockerfile
+      args:
+        - STRATA_COMMIT=${STRATA_COMMIT:-146df3c468739147f520ac3816de806f71232571}
+        #- CUDA_ARCHITECTURES=89 #RTX 40 only
     container_name: strata01
     ulimits:
       memlock: -1
@@ -14,6 +16,10 @@ services:
       #MODEL: 'IQ3_XXS'
       #MODEL: 'IQ3_S'
       #MODEL: 'Coder'
+      CONTEXT: ${CONTEXT:-32k}
+      PARALLEL: ${PARALLEL:-} 
+      VISION: ${VISION:-off} 
+      API_KEY: ${API_KEY:-}
     ports:
       - '11435:11435/tcp'
     volumes:
